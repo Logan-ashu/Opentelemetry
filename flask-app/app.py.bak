@@ -1,0 +1,50 @@
+from flask import Flask, render_template, request, redirect, url_for
+from prometheus_flask_exporter import PrometheusMetrics
+from flask_opentracing import FlaskTracing
+from jaeger_client import Config
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a real secret key
+
+metrics = PrometheusMetrics(app)
+
+# Jaeger configuration
+config = Config(
+    config={
+        'sampler': {
+            'type': 'const',
+            'param': 1,
+        },
+        'logging': True,
+    },
+    service_name='flask-app',
+)
+jaeger_tracer = config.initialize_tracer()
+tracing = FlaskTracing(jaeger_tracer, True, app)
+
+# Define a WTForm Class
+class MyForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+@app.route('/', methods=['GET', 'POST'])
+def hello_world():
+    form = MyForm()
+    if form.validate_on_submit():
+        with jaeger_tracer.start_span('form-submit') as span:
+            span.log_kv({'event': 'form-submit', 'name': form.name.data})
+            # Here you would normally process the form data and possibly redirect or give feedback to the user
+            return redirect(url_for('hello_world'))
+    
+    # Even if it's a GET request, we want to trace it
+    with jaeger_tracer.start_span('hello-world') as span:
+        span.log_kv({'event': 'hello-world', 'value': 'user accessed /'})
+        
+    return render_template('form.html', form=form)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+

@@ -1,0 +1,5 @@
+flask
+prometheus_flask_exporter
+jaeger-client
+flask_opentracing
+Flask-WTF
