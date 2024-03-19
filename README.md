@@ -1,9 +1,7 @@
-#
-Open-telemetry with Prometheus and Grafana using simple python flask app.
+**Open-telemetry with Prometheus and Grafana using simple python flask app.**
+
 
 Step 1: Write code for a flask app.
-
-
 **
 from flask import Flask, render_template, request, redirect, url_for, flash
 from prometheus_flask_exporter import PrometheusMetrics
