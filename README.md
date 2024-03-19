@@ -2,7 +2,7 @@
 
 
 Step 1: Write code for a flask app.
-**
+
 from flask import Flask, render_template, request, redirect, url_for, flash
 from prometheus_flask_exporter import PrometheusMetrics
 from flask_opentracing import FlaskTracing
@@ -52,7 +52,6 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
-**
 Step 2: Create a Dockerfile for the flask app.
 
 # Use an official Python runtime as a parent image
