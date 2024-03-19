@@ -57,7 +57,7 @@ if __name__ == '__main__':
 **
 Step 2: Create a Dockerfile for the flask app.
 
-**# Use an official Python runtime as a parent image
+# Use an official Python runtime as a parent image
 FROM python:3.8-slim
 
 # Set the working directory in the container
@@ -78,7 +78,7 @@ ENV NAME World
 # Run app.py when the container launches
 CMD ["flask", "run", "--host=0.0.0.0"]
 
-**
+
 
 Step 3: 
 Create a file named as requirements.txt which includes all the packages that needs to be installed.
